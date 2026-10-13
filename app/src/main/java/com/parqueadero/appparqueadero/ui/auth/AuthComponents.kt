@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -46,7 +48,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.parqueadero.appparqueadero.ui.theme.CupoFonts
 import com.parqueadero.appparqueadero.ui.theme.Radius
 import com.parqueadero.appparqueadero.ui.theme.Spacing
@@ -66,7 +67,8 @@ fun CupoMarca(modifier: Modifier = Modifier, tamano: Dp = 56.dp) {
             color = MaterialTheme.colorScheme.onPrimary,
             fontFamily = CupoFonts.SpaceGrotesk,
             fontWeight = FontWeight.Bold,
-            fontSize = (tamano.value * 0.6f).sp,
+            // Logotipo: tamaño ligado al cuadro (dp), no al tamaño de texto del sistema, para que la P no se desborde.
+            fontSize = with(LocalDensity.current) { (tamano * 0.6f).toSp() },
         )
     }
 }
@@ -154,7 +156,7 @@ fun BotonPrincipal(
         modifier = modifier
             .fillMaxWidth()
             .widthIn(max = 480.dp)
-            .height(52.dp),
+            .heightIn(min = 52.dp),
     ) {
         if (cargando) {
             CircularProgressIndicator(

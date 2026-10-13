@@ -2,7 +2,9 @@ package com.parqueadero.appparqueadero.ui.actividad
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -147,27 +149,40 @@ private fun Resumen(resumen: UiState<ResumenUsuarioDTO>, onReintentar: () -> Uni
             }
         }
         is UiState.Error -> ErrorState(mensaje = resumen.mensaje, titulo = "No pudimos cargar tu resumen", onReintentar = onReintentar)
-        UiState.Empty -> Unit
+        UiState.Empty -> EmptyState(
+            titulo = "Sin resumen todavía",
+            mensaje = "Cuando tengas pagos y visitas registrados verás aquí tus indicadores.",
+            icono = Icons.Rounded.EventAvailable,
+        )
         is UiState.Success -> {
             val r = resumen.data
-            val kpis = listOf(
-                Kpi("Días restantes", r.diasRestantes?.toString(), "de tu mensualidad", Icons.Rounded.EventAvailable),
-                Kpi("Pagado este año", r.totalPagadoAnio?.comoPesos(), null, Icons.Rounded.Payments),
-                Kpi("Promedio mensual", r.promedioMensualPagado?.comoPesos(), "pagado", Icons.AutoMirrored.Rounded.TrendingUp),
-                Kpi("Visitas del mes", r.visitasMes?.toString(), "entradas", Icons.Rounded.CalendarMonth),
-                Kpi("Permanencia", ActividadViewModel.duracionLegible(r.permanenciaPromedioMin), "promedio por visita", Icons.Rounded.Timer),
-                Kpi("Llegada habitual", r.horaHabitualLlegada, "hora más frecuente", Icons.Rounded.Schedule),
+            // Los montos en pesos van a ancho completo: en 360 dp no caben a tamaño KPI en media tarjeta.
+            val filas = listOf(
+                listOf(
+                    Kpi("Días restantes", r.diasRestantes?.toString(), "de tu mensualidad", Icons.Rounded.EventAvailable),
+                    Kpi("Visitas del mes", r.visitasMes?.toString(), "entradas este mes", Icons.Rounded.CalendarMonth),
+                ),
+                listOf(Kpi("Pagado este año", r.totalPagadoAnio?.comoPesos(), "en lo que va del año", Icons.Rounded.Payments)),
+                listOf(Kpi("Promedio mensual", r.promedioMensualPagado?.comoPesos(), "pagado por mes", Icons.AutoMirrored.Rounded.TrendingUp)),
+                listOf(
+                    Kpi("Permanencia", ActividadViewModel.duracionLegible(r.permanenciaPromedioMin), "promedio por visita", Icons.Rounded.Timer),
+                    Kpi("Llegada habitual", r.horaHabitualLlegada, "hora más frecuente", Icons.Rounded.Schedule),
+                ),
             )
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                kpis.chunked(2).forEach { fila ->
-                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
+                filas.forEach { fila ->
+                    // Altura intrínseca: las dos tarjetas de una fila quedan iguales aunque una tenga más texto.
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                        modifier = Modifier.height(IntrinsicSize.Min),
+                    ) {
                         fila.forEach { k ->
                             KpiCard(
                                 titulo = k.titulo,
                                 valor = k.valor,
                                 apoyo = k.apoyo,
                                 icono = k.icono,
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier.weight(1f).fillMaxHeight(),
                             )
                         }
                     }

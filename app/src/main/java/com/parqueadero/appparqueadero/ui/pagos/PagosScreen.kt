@@ -10,7 +10,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.rounded.CloudUpload
 import androidx.compose.material.icons.rounded.HourglassTop
 import androidx.compose.material.icons.rounded.PhotoCamera
 import androidx.compose.material.icons.rounded.PhotoLibrary
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -54,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -172,7 +176,7 @@ private fun ProximoPeriodo(periodo: UiState<ProximoPeriodoDTO>, onReintentar: ()
         is UiState.Success -> Card(
             shape = RoundedCornerShape(Radius.lg),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
         ) {
             Column(Modifier.padding(Spacing.md), verticalArrangement = Arrangement.spacedBy(Spacing.xxs)) {
                 Text("Próximo periodo", style = MaterialTheme.typography.titleSmall)
@@ -205,20 +209,35 @@ private fun SubirComprobante(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                OutlinedButton(onClick = onCamara, enabled = !s.leyendo, modifier = Modifier.weight(1f).height(48.dp)) {
-                    Icon(Icons.Rounded.PhotoCamera, contentDescription = null, modifier = Modifier.size(18.dp))
+            // Altura mínima (no fija) y relleno de botón con icono: con texto grande crecen en vez de cortarse en 360 dp.
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm), modifier = Modifier.height(IntrinsicSize.Min)) {
+                OutlinedButton(
+                    onClick = onCamara,
+                    enabled = !s.leyendo,
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    modifier = Modifier.weight(1f).fillMaxHeight().heightIn(min = 48.dp),
+                ) {
+                    Icon(Icons.Rounded.PhotoCamera, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
                     Text("Tomar foto", modifier = Modifier.padding(start = Spacing.xs))
                 }
-                OutlinedButton(onClick = onGaleria, enabled = !s.leyendo, modifier = Modifier.weight(1f).height(48.dp)) {
-                    Icon(Icons.Rounded.PhotoLibrary, contentDescription = null, modifier = Modifier.size(18.dp))
+                OutlinedButton(
+                    onClick = onGaleria,
+                    enabled = !s.leyendo,
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    modifier = Modifier.weight(1f).fillMaxHeight().heightIn(min = 48.dp),
+                ) {
+                    Icon(Icons.Rounded.PhotoLibrary, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
                     Text("Galería", modifier = Modifier.padding(start = Spacing.xs))
                 }
             }
             if (s.leyendo) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                    modifier = Modifier.semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+                ) {
                     CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
-                    Text("Revisando la imagen...", style = MaterialTheme.typography.bodyMedium)
+                    Text("Revisando la imagen…", style = MaterialTheme.typography.bodyMedium)
                 }
             }
         } else {
@@ -285,7 +304,9 @@ private fun Historial(historial: UiState<List<GrupoPagos>>, onReintentar: () -> 
                     if (grupo.anio > 0) grupo.anio.toString() else "Sin fecha",
                     style = MaterialTheme.typography.titleMedium.tabular(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = Spacing.xs),
+                    modifier = Modifier
+                        .padding(top = Spacing.xs)
+                        .semantics { heading() },
                 )
                 Card(
                     shape = RoundedCornerShape(Radius.md),
@@ -304,7 +325,12 @@ private fun Historial(historial: UiState<List<GrupoPagos>>, onReintentar: () -> 
 
 @Composable
 private fun FilaPago(pago: PagoDTO) {
-    Column(Modifier.padding(Spacing.md), verticalArrangement = Arrangement.spacedBy(Spacing.xxs)) {
+    Column(
+        Modifier
+            .semantics(mergeDescendants = true) {}
+            .padding(Spacing.md),
+        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 rangoPeriodo(pago.periodoInicio, pago.periodoFin),
