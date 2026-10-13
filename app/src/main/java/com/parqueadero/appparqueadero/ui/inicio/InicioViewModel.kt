@@ -121,13 +121,14 @@ class InicioViewModel(
 
     /**
      * Tiempo que la puerta sigue abierta. Se calcula con la hora del teléfono, que puede diferir de la del
-     * servidor: si el resultado no es razonable (0 a 15 s) se usan los 10 s del contrato.
+     * servidor: si el resultado no es razonable (1 a 20 s) se usan los 15 s configurados en el backend
+     * (`accesos.apertura-segundos`).
      */
     private fun duracionApertura(abiertaHasta: String?): Long? {
         val hasta = abiertaHasta?.aEpochMillisONull() ?: return DURACION_POR_DEFECTO_MS
         val restante = hasta - ahora()
         return when {
-            restante in 1_000..15_000 -> restante
+            restante in 1_000..20_000 -> restante
             restante <= 0 && restante > -60_000 -> null
             else -> DURACION_POR_DEFECTO_MS
         }
@@ -148,7 +149,7 @@ class InicioViewModel(
     }
 
     companion object {
-        const val DURACION_POR_DEFECTO_MS = 10_000L
+        const val DURACION_POR_DEFECTO_MS = 15_000L
 
         val Factory = viewModelFactory {
             initializer { InicioViewModel(container.usuarioRepository, container.accesoRepository) }
