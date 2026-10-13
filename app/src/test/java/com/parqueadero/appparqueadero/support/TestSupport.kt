@@ -12,13 +12,12 @@ import com.parqueadero.appparqueadero.data.model.ProximoPeriodoDTO
 import com.parqueadero.appparqueadero.data.model.PuertaComandoDTO
 import com.parqueadero.appparqueadero.data.model.PuertaDTO
 import com.parqueadero.appparqueadero.data.model.ResumenUsuarioDTO
-import com.parqueadero.appparqueadero.data.model.TarifaDTO
 import com.parqueadero.appparqueadero.data.model.TokenDTO
 import com.parqueadero.appparqueadero.data.model.UsuarioDTO
 import com.parqueadero.appparqueadero.data.network.ApiService
+import com.parqueadero.appparqueadero.data.session.BovedaPin
 import com.parqueadero.appparqueadero.data.session.Preferencias
-import com.parqueadero.appparqueadero.data.session.SesionGuardada
-import com.parqueadero.appparqueadero.data.session.SesionStorage
+import com.parqueadero.appparqueadero.data.session.PreparacionHuella
 import com.parqueadero.appparqueadero.ui.theme.ThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,6 +35,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import retrofit2.HttpException
 import retrofit2.Response
+import javax.crypto.Cipher
 
 val gsonPrueba = Gson()
 
@@ -63,13 +63,10 @@ class FakeApiService : ApiService {
     var yoResp: suspend () -> UsuarioDTO = { noConfigurado() }
     var cambiarPinResp: suspend (CambioPinDTO) -> Response<Unit> = { noConfigurado() }
     var resumenResp: suspend () -> ResumenUsuarioDTO = { noConfigurado() }
-    var tarifasResp: suspend () -> List<TarifaDTO> = { noConfigurado() }
     var proximoPeriodoResp: suspend () -> ProximoPeriodoDTO = { noConfigurado() }
     var subirPagoResp: suspend (MultipartBody.Part) -> PagoDTO = { noConfigurado() }
     var misPagosResp: suspend () -> List<PagoDTO> = { noConfigurado() }
-    var pagoResp: suspend (Long) -> PagoDTO = { noConfigurado() }
     var misAccesosResp: suspend () -> List<EventoAccesoDTO> = { noConfigurado() }
-    var puertaResp: suspend () -> PuertaDTO = { noConfigurado() }
     var abrirPuertaResp: suspend (PuertaComandoDTO) -> Response<PuertaDTO> = { noConfigurado() }
     var camarasResp: suspend () -> List<CamaraDTO> = { noConfigurado() }
 
@@ -85,22 +82,63 @@ class FakeApiService : ApiService {
     override suspend fun yo() = yoResp()
     override suspend fun cambiarPin(dto: CambioPinDTO): Response<Unit> { cambiosPin += dto; return cambiarPinResp(dto) }
     override suspend fun resumen() = resumenResp()
-    override suspend fun tarifas() = tarifasResp()
     override suspend fun proximoPeriodo() = proximoPeriodoResp()
     override suspend fun subirPago(comprobante: MultipartBody.Part): PagoDTO { partesSubidas += comprobante; return subirPagoResp(comprobante) }
     override suspend fun misPagos() = misPagosResp()
-    override suspend fun pago(id: Long) = pagoResp(id)
     override suspend fun misAccesos() = misAccesosResp()
-    override suspend fun puerta() = puertaResp()
     override suspend fun abrirPuerta(dto: PuertaComandoDTO): Response<PuertaDTO> { comandosPuerta += dto; return abrirPuertaResp(dto) }
     override suspend fun camaras() = camarasResp()
 }
 
-class FakeSesionStorage(var guardada: SesionGuardada? = null) : SesionStorage {
+/** Bóveda falsa: el cifrador solo se pasa de un lado a otro; `leer` devuelve el PIN guardado sin descifrar. */
+class FakeBovedaPin(configurada: Boolean = false) : BovedaPin {
+    val configuradaFlow = MutableStateFlow(configurada)
+    override val configurada: Flow<Boolean> = configuradaFlow
+    var telefonoGuardado: String? = null
+    var pinGuardado: String? = null
     var borrados = 0
-    override suspend fun leer() = guardada
-    override suspend fun guardar(sesion: SesionGuardada) { guardada = sesion }
-    override suspend fun borrar() { borrados++; guardada = null }
+    /** Respuesta de cifradorParaLeer; por defecto Lista con [cifrador] si está configurada. */
+    var preparacion: PreparacionHuella? = null
+    var cifradorGuardarResp: () -> Cipher? = { cifrador }
+    var guardarResp = true
+    var leerFalla = false
+    val cifradoresUsados = mutableListOf<Cipher>()
+
+    override suspend fun telefono() = telefonoGuardado
+    override fun cifradorParaGuardar(): Cipher? = cifradorGuardarResp()
+    override suspend fun cifradorParaLeer(): PreparacionHuella =
+        preparacion ?: if (configuradaFlow.value) PreparacionHuella.Lista(cifrador) else PreparacionHuella.NoConfigurada
+
+    override suspend fun guardar(cifrador: Cipher, telefono: String, pin: String): Boolean {
+        cifradoresUsados += cifrador
+        if (!guardarResp) return false
+        telefonoGuardado = telefono
+        pinGuardado = pin
+        configuradaFlow.value = true
+        return true
+    }
+
+    override suspend fun leer(cifrador: Cipher): String? {
+        cifradoresUsados += cifrador
+        return if (leerFalla) null else pinGuardado
+    }
+
+    override suspend fun borrar() {
+        borrados++
+        telefonoGuardado = null
+        pinGuardado = null
+        configuradaFlow.value = false
+    }
+
+    fun configurar(telefono: String, pin: String) {
+        telefonoGuardado = telefono
+        pinGuardado = pin
+        configuradaFlow.value = true
+    }
+
+    companion object {
+        val cifrador: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+    }
 }
 
 class FakePreferencias(telefono: String? = null) : Preferencias {
