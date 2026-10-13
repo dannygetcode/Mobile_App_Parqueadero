@@ -7,6 +7,8 @@ import com.parqueadero.appparqueadero.data.network.AuthInterceptor
 import com.parqueadero.appparqueadero.data.network.ErrorParser
 import com.parqueadero.appparqueadero.data.repository.AccesoRepository
 import com.parqueadero.appparqueadero.data.repository.AuthRepository
+import com.parqueadero.appparqueadero.data.repository.ContentResolverFuenteImagen
+import com.parqueadero.appparqueadero.data.repository.FuenteImagen
 import com.parqueadero.appparqueadero.data.repository.PagoRepository
 import com.parqueadero.appparqueadero.data.repository.UsuarioRepository
 import com.parqueadero.appparqueadero.data.session.DataStorePreferencias
@@ -62,4 +64,5 @@ class AppContainer(context: Context) {
     val usuarioRepository = UsuarioRepository(api, errores, sesion)
     val pagoRepository = PagoRepository(api, errores)
     val accesoRepository = AccesoRepository(api, errores, gson)
+    val fuenteImagen: FuenteImagen = ContentResolverFuenteImagen(context)
 }
