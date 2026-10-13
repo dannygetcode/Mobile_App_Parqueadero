@@ -30,8 +30,6 @@ class AccesoRepository(
 
     suspend fun camaras(): Resultado<List<CamaraDTO>> = errores.llamar { api.camaras() }
 
-    suspend fun estadoPuerta(): Resultado<PuertaDTO> = errores.llamar { api.puerta() }
-
     /** El usuario solo puede abrir; la puerta se cierra sola en `abiertaHasta`. */
     suspend fun abrirPuerta(): Resultado<ResultadoPuerta> {
         val respuesta = when (val r = errores.llamar { api.abrirPuerta(PuertaComandoDTO(abierta = true)) }) {

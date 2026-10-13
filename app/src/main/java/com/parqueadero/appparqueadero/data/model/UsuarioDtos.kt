@@ -45,13 +45,6 @@ data class ResumenUsuarioDTO(
     val horaHabitualLlegada: String?,
 )
 
-data class TarifaDTO(
-    val id: Long,
-    val tipoVehiculo: TipoVehiculo?,
-    val valorMensual: Long,
-    val vigenteDesde: String?,
-)
-
 data class CamaraDTO(
     val id: Long,
     val nombre: String,

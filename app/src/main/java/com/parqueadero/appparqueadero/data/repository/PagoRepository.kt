@@ -17,8 +17,6 @@ class PagoRepository(
 
     suspend fun misPagos(): Resultado<List<PagoDTO>> = errores.llamar { api.misPagos() }
 
-    suspend fun pago(id: Long): Resultado<PagoDTO> = errores.llamar { api.pago(id) }
-
     /**
      * Sube el comprobante en la parte multipart `comprobante`. El usuario y el periodo los deduce el backend.
      * La validación de tipo (JPEG/PNG) y tamaño (5 MB) se hace antes, en la pantalla de pagos.
