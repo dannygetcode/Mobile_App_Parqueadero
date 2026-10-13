@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Fondo del icono: azul de la senal P en degradado. -->
+<!-- Fondo del icono: azul de la señal P en degradado. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
@@ -18,7 +18,7 @@
                 android:endColor="#FF0A3F96" />
         </aapt:attr>
     </path>
-    <!-- Linea de carril tenue -->
+    <!-- Línea de carril tenue (decorativa, fuera de la zona segura: puede recortarse según la máscara) -->
     <path
         android:fillColor="#14FFFFFF"
         android:pathData="M0,88h108v4h-108z" />

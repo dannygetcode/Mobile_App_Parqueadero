@@ -35,8 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -106,9 +109,12 @@ fun ActivarScreen(
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            // "Paso N de 3" ya lo dice; la barra es solo visual para no anunciar también un porcentaje.
             LinearProgressIndicator(
                 progress = { numeroPaso / 3f },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clearAndSetSemantics { },
             )
         }
 
@@ -169,7 +175,7 @@ private fun PasoPin(s: ActivarUiState, vm: ActivarViewModel) {
     LaunchedEffect(Unit) { focoPin.requestFocus() }
 
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-        Text("PIN nuevo", style = MaterialTheme.typography.labelLarge)
+        Text("PIN nuevo", style = MaterialTheme.typography.labelLarge, modifier = Modifier.clearAndSetSemantics { })
         PinInput(
             valor = s.pin,
             onValorChange = vm::onPin,
@@ -182,7 +188,7 @@ private fun PasoPin(s: ActivarUiState, vm: ActivarViewModel) {
         s.errorPin?.let { TextoError(it) }
     }
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-        Text("Confirma el PIN", style = MaterialTheme.typography.labelLarge)
+        Text("Confirma el PIN", style = MaterialTheme.typography.labelLarge, modifier = Modifier.clearAndSetSemantics { })
         PinInput(
             valor = s.confirmacion,
             onValorChange = vm::onConfirmacion,
@@ -207,7 +213,11 @@ private fun PasoConsentimiento(s: ActivarUiState, vm: ActivarViewModel) {
             titulo = "No pudimos cargar el aviso de privacidad",
             onReintentar = vm::cargarAviso,
         )
-        UiState.Empty -> Unit
+        UiState.Empty -> ErrorState(
+            mensaje = "El aviso de privacidad no está disponible en este momento.",
+            titulo = "Sin aviso de privacidad",
+            onReintentar = vm::cargarAviso,
+        )
         is UiState.Success -> {
             Column(
                 modifier = Modifier
@@ -268,5 +278,10 @@ private fun CuentaActivada(onIrALogin: () -> Unit) {
 
 @Composable
 private fun TextoError(texto: String) {
-    Text(texto, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+    Text(
+        texto,
+        color = MaterialTheme.colorScheme.error,
+        style = MaterialTheme.typography.bodySmall,
+        modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+    )
 }

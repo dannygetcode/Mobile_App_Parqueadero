@@ -3,7 +3,7 @@ package com.parqueadero.appparqueadero.ui.auth.login
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -107,7 +108,7 @@ fun LoginScreen(
                     shape = RoundedCornerShape(Radius.md),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .heightIn(min = 52.dp),
                 ) {
                     Icon(Icons.Rounded.Fingerprint, contentDescription = null)
                     Text("Entrar con huella", modifier = Modifier.padding(start = Spacing.xs))
@@ -143,7 +144,8 @@ fun LoginScreen(
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-            Text("PIN", style = MaterialTheme.typography.labelLarge)
+            // El campo ya anuncia "PIN": la etiqueta visible no se repite en TalkBack.
+            Text("PIN", style = MaterialTheme.typography.labelLarge, modifier = Modifier.clearAndSetSemantics { })
             PinInput(
                 valor = estado.pin,
                 onValorChange = viewModel::onPin,

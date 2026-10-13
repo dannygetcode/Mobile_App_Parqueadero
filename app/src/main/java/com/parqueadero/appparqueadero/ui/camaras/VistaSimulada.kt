@@ -135,7 +135,7 @@ fun VistaSimulada(camara: CamaraDTO, modifier: Modifier = Modifier) {
                     .align(Alignment.TopStart)
                     .padding(Spacing.sm)
                     .background(VELO, RoundedCornerShape(Radius.sm))
-                    .padding(horizontal = Spacing.xs, vertical = 2.dp),
+                    .padding(horizontal = Spacing.xs, vertical = Spacing.xxs),
             ) {
                 Box(
                     Modifier
@@ -171,7 +171,7 @@ fun VistaSimulada(camara: CamaraDTO, modifier: Modifier = Modifier) {
                 .align(Alignment.BottomStart)
                 .padding(Spacing.sm)
                 .background(VELO, RoundedCornerShape(Radius.sm))
-                .padding(horizontal = Spacing.xs, vertical = 2.dp),
+                .padding(horizontal = Spacing.xs, vertical = Spacing.xxs),
         )
     }
 }
@@ -191,6 +191,6 @@ private fun Reloj(modifier: Modifier = Modifier) {
         color = Color.White,
         modifier = modifier
             .background(VELO, RoundedCornerShape(Radius.sm))
-            .padding(horizontal = Spacing.xs, vertical = 2.dp),
+            .padding(horizontal = Spacing.xs, vertical = Spacing.xxs),
     )
 }

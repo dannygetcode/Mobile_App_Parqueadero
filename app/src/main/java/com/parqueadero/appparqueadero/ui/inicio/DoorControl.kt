@@ -169,7 +169,7 @@ fun DoorControl(
 
     val textoEstado = when (estado) {
         is PuertaUiState.Cerrada -> if (arrastrando && progreso.value >= 0.5f) "Suelta para abrir" else "Desliza hacia arriba para abrir"
-        PuertaUiState.Enviando -> "Abriendo..."
+        PuertaUiState.Enviando -> "Abriendo…"
         is PuertaUiState.Abierta -> "Puerta abierta"
         is PuertaUiState.Denegada -> "No pudimos abrir"
         is PuertaUiState.Fallo -> "No pudimos abrir"
@@ -450,6 +450,6 @@ private fun EtiquetaSimulacion(modifier: Modifier = Modifier) {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(Radius.sm))
-            .padding(horizontal = Spacing.xs, vertical = 2.dp),
+            .padding(horizontal = Spacing.xs, vertical = Spacing.xxs),
     )
 }
