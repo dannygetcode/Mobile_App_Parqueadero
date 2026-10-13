@@ -7,6 +7,7 @@ import com.parqueadero.appparqueadero.data.network.ApiService
 import com.parqueadero.appparqueadero.data.network.ErrorParser
 import com.parqueadero.appparqueadero.data.network.Resultado
 import com.parqueadero.appparqueadero.data.network.map
+import com.parqueadero.appparqueadero.data.session.BovedaPin
 import com.parqueadero.appparqueadero.data.session.MotivoCierre
 import com.parqueadero.appparqueadero.data.session.Preferencias
 import com.parqueadero.appparqueadero.data.session.SessionManager
@@ -17,6 +18,7 @@ class AuthRepository(
     private val errores: ErrorParser,
     private val sesion: SessionManager,
     private val preferencias: Preferencias,
+    private val bovedaPin: BovedaPin,
 ) {
     suspend fun avisoPrivacidad(): Resultado<AvisoPrivacidadDTO> = errores.llamar { api.avisoPrivacidad() }
 
@@ -37,11 +39,15 @@ class AuthRepository(
                 )
             )
         }
-        if (resultado is Resultado.Ok) preferencias.recordarTelefono(telefono)
+        if (resultado is Resultado.Ok) {
+            preferencias.recordarTelefono(telefono)
+            // Activar con un código nuevo cambia el PIN: el guardado para la huella ya no sirve.
+            bovedaPin.borrar()
+        }
         return resultado
     }
 
-    /** Inicia sesión y guarda el token cifrado. Al cambiar el estado de la sesión, la navegación pasa al grafo principal. */
+    /** Inicia sesión; el token queda solo en memoria. Al cambiar el estado de la sesión, la navegación pasa al grafo principal. */
     suspend fun login(telefono: String, pin: String): Resultado<Unit> {
         val resultado = errores.llamar { api.login(LoginDTO(telefono, pin)) }
         if (resultado is Resultado.Ok) {
@@ -51,5 +57,5 @@ class AuthRepository(
         return resultado.map { }
     }
 
-    suspend fun cerrarSesion() = sesion.cerrar(MotivoCierre.CERRADA_POR_USUARIO)
+    fun cerrarSesion() = sesion.cerrar(MotivoCierre.CERRADA_POR_USUARIO)
 }

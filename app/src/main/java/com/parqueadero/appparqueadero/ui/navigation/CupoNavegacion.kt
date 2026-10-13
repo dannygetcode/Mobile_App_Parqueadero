@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,9 +31,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.first
 import com.parqueadero.appparqueadero.data.session.EstadoSesion
 import com.parqueadero.appparqueadero.data.session.MotivoCierre
+import com.parqueadero.appparqueadero.data.session.Preferencias
 import com.parqueadero.appparqueadero.data.session.SessionManager
+import com.parqueadero.appparqueadero.ui.actividad.ActividadScreen
 import com.parqueadero.appparqueadero.ui.auth.BienvenidaScreen
 import com.parqueadero.appparqueadero.ui.auth.activar.ActivarScreen
 import com.parqueadero.appparqueadero.ui.auth.login.LoginScreen
@@ -60,24 +64,31 @@ object Rutas {
  * completo (no queda en la pila) y cualquier 401 o cierre de sesión descarta el principal.
  */
 @Composable
-fun CupoRaiz(sesion: SessionManager) {
+fun CupoRaiz(sesion: SessionManager, preferencias: Preferencias) {
     val estado by sesion.estado.collectAsStateWithLifecycle()
-    when (val e = estado) {
-        EstadoSesion.Cargando -> Box(
+    // Quien ya activó o usó la cuenta en este teléfono empieza en el login, no en la bienvenida.
+    val hayCuenta by produceState<Boolean?>(initialValue = null) {
+        value = preferencias.telefonoRecordado.first() != null
+    }
+    val cuenta = hayCuenta
+    when {
+        estado == EstadoSesion.Activa -> GrafoPrincipal()
+        cuenta == null -> Box(
             Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         )
-        EstadoSesion.Activa -> GrafoPrincipal()
-        is EstadoSesion.Inactiva -> GrafoAcceso(e.motivo)
+        else -> GrafoAcceso(
+            motivo = (estado as? EstadoSesion.Inactiva)?.motivo,
+            iniciarEnLogin = cuenta || (estado as? EstadoSesion.Inactiva)?.motivo != null,
+        )
     }
 }
 
 @Composable
-private fun GrafoAcceso(motivo: MotivoCierre?) {
+private fun GrafoAcceso(motivo: MotivoCierre?, iniciarEnLogin: Boolean) {
     val nav = rememberNavController()
-    // Quien ya tuvo sesión en este proceso vuelve directo al login.
-    val inicio = if (motivo != null) Rutas.LOGIN else Rutas.BIENVENIDA
+    val inicio = if (iniciarEnLogin) Rutas.LOGIN else Rutas.BIENVENIDA
 
     NavHost(navController = nav, startDestination = inicio) {
         composable(Rutas.BIENVENIDA) {
@@ -154,7 +165,7 @@ private fun GrafoPrincipal() {
                 InicioScreen(onAbrirCamaras = { nav.navigate(Rutas.CAMARAS) { launchSingleTop = true } })
             }
             composable(Rutas.PAGOS) { PagosScreen() }
-            composable(Rutas.ACTIVIDAD) { PantallaProvisional("Actividad", "Aquí verás tus visitas y pagos del año.") }
+            composable(Rutas.ACTIVIDAD) { ActividadScreen() }
             composable(Rutas.PERFIL) { PerfilScreen() }
             composable(Rutas.CAMARAS) { CamarasScreen(onAtras = { nav.popBackStack() }) }
         }
