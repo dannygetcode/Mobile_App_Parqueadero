@@ -8,7 +8,10 @@ import com.parqueadero.appparqueadero.data.session.MotivoCierre
 import com.parqueadero.appparqueadero.data.session.SessionManager
 import com.parqueadero.appparqueadero.support.FakeApiService
 import com.parqueadero.appparqueadero.support.FakePreferencias
-import com.parqueadero.appparqueadero.support.FakeSesionStorage
+import com.parqueadero.appparqueadero.data.model.TokenDTO
+import com.parqueadero.appparqueadero.support.FakeBovedaPin
+import com.parqueadero.appparqueadero.support.httpError
+import kotlinx.coroutines.launch
 import com.parqueadero.appparqueadero.support.MainDispatcherRule
 import com.parqueadero.appparqueadero.support.gsonPrueba
 import com.parqueadero.appparqueadero.support.problem
@@ -34,18 +37,19 @@ class PerfilViewModelTest {
     val mainRule = MainDispatcherRule()
 
     private val api = FakeApiService().apply { yoResp = { usuario() } }
-    private val storage = FakeSesionStorage()
     private val prefs = FakePreferencias()
-    private val sesion = SessionManager(storage, CoroutineScope(mainRule.dispatcher))
+    private val sesion = SessionManager { 0L }
+    private val boveda = FakeBovedaPin()
     private val parser = ErrorParser(gsonPrueba)
 
     @Before
-    fun iniciarSesion() = runBlocking { sesion.iniciar("jwt", null) }
+    fun iniciarSesion() = sesion.iniciar("jwt", null)
 
     private fun vm() = PerfilViewModel(
-        UsuarioRepository(api, parser, sesion),
-        AuthRepository(api, parser, sesion, prefs),
+        UsuarioRepository(api, parser, sesion, boveda),
+        AuthRepository(api, parser, sesion, prefs, boveda),
         prefs,
+        boveda,
     )
 
     private fun PerfilViewModel.llenar(actual: String = "482915", nuevo: String = "739164", confirmacion: String = nuevo) {
@@ -120,7 +124,7 @@ class PerfilViewModelTest {
         vm.llenar()
         assertNull(vm.cambioPin.value)
         assertEquals(EstadoSesion.Inactiva(MotivoCierre.PIN_CAMBIADO), sesion.estado.value)
-        assertNull(storage.guardada)
+        assertNull(sesion.tokenActual())
         assertEquals("482915", api.cambiosPin.single().pinActual)
         assertEquals("739164", api.cambiosPin.single().pinNuevo)
     }
@@ -182,6 +186,176 @@ class PerfilViewModelTest {
         val vm = vm()
         vm.cerrarSesion()
         assertEquals(EstadoSesion.Inactiva(MotivoCierre.CERRADA_POR_USUARIO), sesion.estado.value)
-        assertEquals(1, storage.borrados)
+        assertNull(sesion.tokenActual())
+        assertEquals(0, boveda.borrados)
+    }
+
+    // Huella
+
+    private fun PerfilViewModel.abrirHuellaCon(pin: String) {
+        abrirActivacionHuella()
+        onPinHuella(pin)
+    }
+
+    private fun loginOk() {
+        api.loginResp = { TokenDTO("jwt-2", null, null) }
+    }
+
+    @Test
+    fun `huellaActivada sigue a la boveda`() {
+        val vm = vm()
+        val job = CoroutineScope(mainRule.dispatcher).launch { vm.huellaActivada.collect {} }
+        assertFalse(vm.huellaActivada.value)
+        boveda.configurar("3001234567", "482915")
+        assertTrue(vm.huellaActivada.value)
+        job.cancel()
+    }
+
+    @Test
+    fun `abrir y cerrar la activacion de huella`() {
+        val vm = vm()
+        assertNull(vm.activacionHuella.value)
+        vm.abrirActivacionHuella()
+        assertEquals(ActivacionHuellaUiState(), vm.activacionHuella.value)
+        vm.onPinHuella("12")
+        assertEquals("12", vm.activacionHuella.value!!.pin)
+        vm.cerrarActivacionHuella()
+        assertNull(vm.activacionHuella.value)
+    }
+
+    @Test
+    fun `verificarPinHuella con PIN incompleto no llama a la API`() = runBlocking {
+        val vm = vm()
+        vm.abrirHuellaCon("4829")
+        assertNull(vm.verificarPinHuella())
+        assertEquals("Escribe los 6 dígitos de tu PIN.", vm.activacionHuella.value!!.error)
+        assertTrue(api.logins.isEmpty())
+    }
+
+    @Test
+    fun `verificarPinHuella sin dialogo abierto devuelve null`() = runBlocking {
+        assertNull(vm().verificarPinHuella())
+        assertTrue(api.logins.isEmpty())
+    }
+
+    @Test
+    fun `verificarPinHuella con 401 dice que el PIN no es correcto y limpia el PIN`() = runBlocking {
+        api.loginResp = { throw httpError(401, problem(401)) }
+        val vm = vm()
+        vm.abrirHuellaCon("000000")
+        assertNull(vm.verificarPinHuella())
+        val s = vm.activacionHuella.value!!
+        assertEquals("El PIN no es correcto.", s.error)
+        assertEquals("", s.pin)
+        assertFalse(s.verificando)
+        vm.guardarHuella(FakeBovedaPin.cifrador) // sin PIN pendiente no guarda
+        assertNull(boveda.pinGuardado)
+    }
+
+    @Test
+    fun `verificarPinHuella con otro error usa el mensaje del login`() = runBlocking {
+        api.loginResp = { throw httpError(423, problem(423)) }
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        assertNull(vm.verificarPinHuella())
+        assertTrue(vm.activacionHuella.value!!.error!!.startsWith("Tu cuenta está bloqueada"))
+    }
+
+    @Test
+    fun `verificarPinHuella OK usa el telefono del usuario y devuelve el cifrador`() = runBlocking {
+        loginOk()
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        assertEquals(FakeBovedaPin.cifrador, vm.verificarPinHuella())
+        assertEquals("3001234567", api.logins.single().telefono)
+        assertEquals("482915", api.logins.single().pin)
+        val s = vm.activacionHuella.value!!
+        assertFalse(s.verificando)
+        assertNull(s.error)
+        assertEquals(EstadoSesion.Activa, sesion.estado.value)
+    }
+
+    @Test
+    fun `verificarPinHuella sin cifrador disponible muestra error`() = runBlocking {
+        loginOk()
+        boveda.cifradorGuardarResp = { null }
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        assertNull(vm.verificarPinHuella())
+        assertEquals("No pudimos preparar la huella en este teléfono.", vm.activacionHuella.value!!.error)
+        vm.guardarHuella(FakeBovedaPin.cifrador)
+        assertNull(boveda.pinGuardado)
+    }
+
+    @Test
+    fun `guardarHuella tras verificar guarda telefono y PIN, cierra el dialogo y avisa`() = runBlocking {
+        loginOk()
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        val cifrador = vm.verificarPinHuella()!!
+        vm.guardarHuella(cifrador)
+        assertEquals("3001234567", boveda.telefonoGuardado)
+        assertEquals("482915", boveda.pinGuardado)
+        assertNull(vm.activacionHuella.value)
+        assertTrue(vm.mensaje.value!!.startsWith("Huella activada"))
+        vm.mensajeMostrado()
+        assertNull(vm.mensaje.value)
+        vm.guardarHuella(cifrador) // el PIN pendiente ya se consumió
+        assertEquals(1, boveda.cifradoresUsados.size)
+    }
+
+    @Test
+    fun `guardarHuella que falla en la boveda avisa del error`() = runBlocking {
+        loginOk()
+        boveda.guardarResp = false
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        vm.guardarHuella(vm.verificarPinHuella()!!)
+        assertEquals("No pudimos guardar la huella. Intenta de nuevo.", vm.mensaje.value)
+        assertNull(vm.activacionHuella.value)
+    }
+
+    @Test
+    fun `falloHuella null (cancelar) cierra el dialogo y descarta el PIN`() = runBlocking {
+        loginOk()
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        val cifrador = vm.verificarPinHuella()!!
+        vm.falloHuella(null)
+        assertNull(vm.activacionHuella.value)
+        vm.guardarHuella(cifrador)
+        assertNull(boveda.pinGuardado)
+    }
+
+    @Test
+    fun `falloHuella con mensaje lo muestra, limpia el PIN y descarta el pendiente`() = runBlocking {
+        loginOk()
+        val vm = vm()
+        vm.abrirHuellaCon("482915")
+        val cifrador = vm.verificarPinHuella()!!
+        vm.falloHuella("Huella no reconocida.")
+        val s = vm.activacionHuella.value!!
+        assertEquals("Huella no reconocida.", s.error)
+        assertEquals("", s.pin)
+        vm.guardarHuella(cifrador)
+        assertNull(boveda.pinGuardado)
+    }
+
+    @Test
+    fun `desactivarHuella borra la boveda y avisa`() {
+        boveda.configurar("3001234567", "482915")
+        val vm = vm()
+        vm.desactivarHuella()
+        assertEquals(1, boveda.borrados)
+        assertEquals("Huella desactivada. Entrarás con tu PIN.", vm.mensaje.value)
+    }
+
+    @Test
+    fun `cambio de PIN OK borra la huella guardada`() {
+        boveda.configurar("3001234567", "482915")
+        api.cambiarPinResp = { Response.success(204, Unit) }
+        vm().llenar()
+        assertEquals(1, boveda.borrados)
+        assertNull(boveda.pinGuardado)
     }
 }
