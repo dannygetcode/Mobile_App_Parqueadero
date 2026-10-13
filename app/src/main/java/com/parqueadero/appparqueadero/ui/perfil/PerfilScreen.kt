@@ -1,5 +1,19 @@
 package com.parqueadero.appparqueadero.ui.perfil
 
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import com.parqueadero.appparqueadero.ui.biometria.HardwareHuella
+import com.parqueadero.appparqueadero.ui.biometria.fragmentActivity
+import com.parqueadero.appparqueadero.ui.biometria.hardwareHuella
+import com.parqueadero.appparqueadero.ui.biometria.pedirHuella
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,10 +80,24 @@ fun PerfilScreen(viewModel: PerfilViewModel = viewModel(factory = PerfilViewMode
     val usuario by viewModel.usuario.collectAsStateWithLifecycle()
     val tema by viewModel.tema.collectAsStateWithLifecycle()
     val cambioPin by viewModel.cambioPin.collectAsStateWithLifecycle()
+    val huellaActivada by viewModel.huellaActivada.collectAsStateWithLifecycle()
+    val activacionHuella by viewModel.activacionHuella.collectAsStateWithLifecycle()
+    val mensaje by viewModel.mensaje.collectAsStateWithLifecycle()
     var confirmarSalida by remember { mutableStateOf(false) }
+    val contexto = LocalContext.current
+    val hardware = remember { hardwareHuella(contexto) }
+    val snackbar = remember { SnackbarHostState() }
+
+    LaunchedEffect(mensaje) {
+        mensaje?.let {
+            snackbar.showSnackbar(it)
+            viewModel.mensajeMostrado()
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = { TopAppBar(title = { Text("Perfil") }) },
     ) { padding ->
         Column(
@@ -96,6 +124,13 @@ fun PerfilScreen(viewModel: PerfilViewModel = viewModel(factory = PerfilViewMode
                 detalle = "Tendrás que volver a iniciar sesión",
                 onClick = viewModel::abrirCambioPin,
             )
+            if (hardware != HardwareHuella.NO_DISPONIBLE) {
+                FilaHuella(
+                    activada = huellaActivada,
+                    habilitada = hardware == HardwareHuella.DISPONIBLE,
+                    onCambio = { activar -> if (activar) viewModel.abrirActivacionHuella() else viewModel.desactivarHuella() },
+                )
+            }
 
             SectionHeader("Apariencia")
             SelectorTema(tema, viewModel::elegirTema)
@@ -128,6 +163,83 @@ fun PerfilScreen(viewModel: PerfilViewModel = viewModel(factory = PerfilViewMode
     }
 
     cambioPin?.let { DialogoCambioPin(it, viewModel) }
+    activacionHuella?.let { DialogoActivarHuella(it, viewModel) }
+}
+
+@Composable
+private fun FilaHuella(activada: Boolean, habilitada: Boolean, onCambio: (Boolean) -> Unit) {
+    Card(
+        shape = RoundedCornerShape(Radius.md),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+            modifier = Modifier
+                .toggleable(value = activada, enabled = habilitada, role = Role.Switch, onValueChange = onCambio)
+                .heightIn(min = 56.dp)
+                .padding(Spacing.md),
+        ) {
+            Icon(Icons.Rounded.Fingerprint, contentDescription = null)
+            Column(Modifier.weight(1f)) {
+                Text("Entrar con huella", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    when {
+                        !habilitada -> "Registra una huella en los ajustes del teléfono para usarla aquí."
+                        activada -> "Al abrir Cupo te pediremos la huella en lugar del PIN."
+                        else -> "Úsala en lugar del PIN al abrir la app."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Switch(checked = activada, onCheckedChange = null, enabled = habilitada)
+        }
+    }
+}
+
+@Composable
+private fun DialogoActivarHuella(s: ActivacionHuellaUiState, vm: PerfilViewModel) {
+    val contexto = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val confirmar: () -> Unit = {
+        val actividad = contexto.fragmentActivity()
+        if (actividad != null) {
+            scope.launch {
+                val cifrador = vm.verificarPinHuella() ?: return@launch
+                pedirHuella(
+                    actividad = actividad,
+                    titulo = "Activar huella",
+                    subtitulo = "Toca el lector para guardar tu acceso",
+                    textoAlternativo = "Cancelar",
+                    cifrador = cifrador,
+                    onExito = vm::guardarHuella,
+                    onFalla = vm::falloHuella,
+                )
+            }
+        }
+    }
+    AlertDialog(
+        onDismissRequest = vm::cerrarActivacionHuella,
+        icon = { Icon(Icons.Rounded.Fingerprint, contentDescription = null) },
+        title = { Text("Activar huella") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
+                Text(
+                    "Confirma tu PIN. Lo guardaremos cifrado en este teléfono y solo se podrá usar con tu huella.",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                CampoPin("PIN", s.pin, s.error, !s.verificando, vm::onPinHuella)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = confirmar, enabled = !s.verificando) {
+                Text(if (s.verificando) "Verificando..." else "Continuar")
+            }
+        },
+        dismissButton = { TextButton(onClick = vm::cerrarActivacionHuella, enabled = !s.verificando) { Text("Cancelar") } },
+    )
 }
 
 @Composable
