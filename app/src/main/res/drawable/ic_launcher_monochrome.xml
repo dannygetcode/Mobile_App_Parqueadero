@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icono tematico (Android 13+): una sola tinta. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M39,27H57A12,12 0,0 1,57,51H49V63H39ZM49,35V43H56A4,4 0,0 0,56,35Z" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M38,68H70A3,3 0,0 1,73,71V77A3,3 0,0 1,70,80H38A3,3 0,0 1,35,77V71A3,3 0,0 1,38,68Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M40.5,72.8H51.5V75.2H40.5ZM56.5,72.8H67.5V75.2H56.5Z" />
+</vector>
