@@ -66,7 +66,7 @@ Space Grotesk (display/headline/title) por su aire de señalética; Inter (body/
 | Reposo | persiana abajo | "Desliza hacia arriba para abrir" |
 | Arrastrando | lamas siguen el dedo | "Suelta para abrir" (desde 50 %) |
 | Enviando | persiana arriba, indicador lineal `primary` en el cajón | "Abriendo..." |
-| Abierta | arriba + tarjeta de evento + anillo 10 s | "Puerta abierta" |
+| Abierta | arriba + tarjeta de evento + anillo con la duración de `abiertaHasta` (15 s por defecto) | "Puerta abierta" |
 | Denegada | baja (resorte de retorno) + sacudida + motivo | "No pudimos abrir" + motivo |
 | Error de red | baja + `ErrorState` compacto | "Sin conexión con el parqueadero." + "Reintentar" |
 
