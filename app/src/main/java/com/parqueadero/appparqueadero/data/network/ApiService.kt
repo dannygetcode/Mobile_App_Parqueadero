@@ -11,7 +11,6 @@ import com.parqueadero.appparqueadero.data.model.ProximoPeriodoDTO
 import com.parqueadero.appparqueadero.data.model.PuertaComandoDTO
 import com.parqueadero.appparqueadero.data.model.PuertaDTO
 import com.parqueadero.appparqueadero.data.model.ResumenUsuarioDTO
-import com.parqueadero.appparqueadero.data.model.TarifaDTO
 import com.parqueadero.appparqueadero.data.model.TokenDTO
 import com.parqueadero.appparqueadero.data.model.UsuarioDTO
 import okhttp3.MultipartBody
@@ -22,7 +21,6 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
-import retrofit2.http.Path
 
 /** Rutas relativas a `{API_URL}api/`. El Bearer lo pone [AuthInterceptor]; la app nunca envía usuarioId. */
 interface ApiService {
@@ -47,9 +45,6 @@ interface ApiService {
     @GET("usuarios/yo/resumen")
     suspend fun resumen(): ResumenUsuarioDTO
 
-    @GET("tarifas")
-    suspend fun tarifas(): List<TarifaDTO>
-
     // Pagos
     @GET("pagos/proximo-periodo")
     suspend fun proximoPeriodo(): ProximoPeriodoDTO
@@ -61,15 +56,9 @@ interface ApiService {
     @GET("pagos/mios")
     suspend fun misPagos(): List<PagoDTO>
 
-    @GET("pagos/{id}")
-    suspend fun pago(@Path("id") id: Long): PagoDTO
-
     // Accesos, puerta y cámaras
     @GET("accesos/mios")
     suspend fun misAccesos(): List<EventoAccesoDTO>
-
-    @GET("puerta")
-    suspend fun puerta(): PuertaDTO
 
     /** 200 si se permite; 403 con un PuertaDTO (no ProblemDetail) si se deniega. */
     @PUT("puerta")
