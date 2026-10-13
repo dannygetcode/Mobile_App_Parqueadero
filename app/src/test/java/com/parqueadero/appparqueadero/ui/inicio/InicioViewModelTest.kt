@@ -8,7 +8,7 @@ import com.parqueadero.appparqueadero.data.repository.AccesoRepository
 import com.parqueadero.appparqueadero.data.repository.UsuarioRepository
 import com.parqueadero.appparqueadero.data.session.SessionManager
 import com.parqueadero.appparqueadero.support.FakeApiService
-import com.parqueadero.appparqueadero.support.FakeSesionStorage
+import com.parqueadero.appparqueadero.support.FakeBovedaPin
 import com.parqueadero.appparqueadero.support.MainDispatcherRule
 import com.parqueadero.appparqueadero.support.evento
 import com.parqueadero.appparqueadero.support.gsonPrueba
@@ -18,7 +18,6 @@ import com.parqueadero.appparqueadero.support.respuestaError
 import com.parqueadero.appparqueadero.support.usuario
 import com.parqueadero.appparqueadero.ui.common.UiState
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -44,11 +43,11 @@ class InicioViewModelTest {
     private val scheduler get() = mainRule.dispatcher.scheduler
     private val api = FakeApiService().apply { yoResp = { usuario() } }
     private val parser = ErrorParser(gsonPrueba)
-    private val sesion = SessionManager(FakeSesionStorage(), CoroutineScope(mainRule.dispatcher))
+    private val sesion = SessionManager { 0L }
     private val reloj = 1_760_000_000_000L
 
     private fun vm() = InicioViewModel(
-        UsuarioRepository(api, parser, sesion),
+        UsuarioRepository(api, parser, sesion, FakeBovedaPin()),
         AccesoRepository(api, parser, gsonPrueba),
         ahora = { reloj },
     )
@@ -115,31 +114,32 @@ class InicioViewModelTest {
     }
 
     @Test
-    fun `abiertaHasta nulo usa 10 s y luego se cierra`() {
+    fun `abiertaHasta nulo usa 15 s y luego se cierra`() {
         permitir(PuertaDTO(true, null, null, evento()))
         val vm = vm()
         vm.abrir()
+        assertEquals(15_000L, InicioViewModel.DURACION_POR_DEFECTO_MS)
         assertEquals(InicioViewModel.DURACION_POR_DEFECTO_MS, (vm.puerta.value as PuertaUiState.Abierta).duracionMs)
-        avanzar(9_999)
+        avanzar(14_999)
         assertTrue(vm.puerta.value is PuertaUiState.Abierta)
         avanzar(2)
         assertEquals(PuertaUiState.Cerrada(), vm.puerta.value)
     }
 
     @Test
-    fun `abiertaHasta irrazonable usa 10 s`() {
+    fun `abiertaHasta irrazonable usa 15 s`() {
         // Lejano (relojes desfasados), menor a 1 s, muy en el pasado e ilegible.
-        for (valor in listOf(hasta(120_000), hasta(500), hasta(-120_000), "no-es-fecha")) {
+        for (valor in listOf(hasta(120_000), hasta(20_001), hasta(500), hasta(-120_000), "no-es-fecha")) {
             permitir(PuertaDTO(true, valor, null, evento()))
             val vm = vm()
             vm.abrir()
-            assertEquals(valor, 10_000L, (vm.puerta.value as PuertaUiState.Abierta).duracionMs)
+            assertEquals(valor, 15_000L, (vm.puerta.value as PuertaUiState.Abierta).duracionMs)
         }
     }
 
     @Test
-    fun `limites de duracion razonable 1 s y 15 s se respetan`() {
-        for (ms in listOf(1_000L, 15_000L)) {
+    fun `limites de duracion razonable 1 s y 20 s se respetan`() {
+        for (ms in listOf(1_000L, 20_000L)) {
             permitir(PuertaDTO(true, hasta(ms), null, evento()))
             val vm = vm()
             vm.abrir()

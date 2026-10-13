@@ -10,18 +10,16 @@ import com.parqueadero.appparqueadero.data.network.ErrorParser
 import com.parqueadero.appparqueadero.data.network.Resultado
 import com.parqueadero.appparqueadero.data.session.EstadoSesion
 import com.parqueadero.appparqueadero.data.session.MotivoCierre
-import com.parqueadero.appparqueadero.data.session.SesionGuardada
 import com.parqueadero.appparqueadero.data.session.SessionManager
 import com.parqueadero.appparqueadero.support.FakeApiService
 import com.parqueadero.appparqueadero.support.FakePreferencias
-import com.parqueadero.appparqueadero.support.FakeSesionStorage
+import com.parqueadero.appparqueadero.support.FakeBovedaPin
 import com.parqueadero.appparqueadero.support.gsonPrueba
 import com.parqueadero.appparqueadero.support.httpError
 import com.parqueadero.appparqueadero.support.problem
 import com.parqueadero.appparqueadero.support.puerta
 import com.parqueadero.appparqueadero.support.respuestaError
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import okio.Buffer
 import org.junit.Assert.assertEquals
@@ -36,74 +34,83 @@ private val parser = ErrorParser(gsonPrueba)
 class AuthRepositoryTest {
 
     private val api = FakeApiService()
-    private val storage = FakeSesionStorage()
     private val prefs = FakePreferencias()
-
-    private fun TestScope.repo(): Pair<AuthRepository, SessionManager> {
-        val sm = SessionManager(storage, this)
-        return AuthRepository(api, parser, sm, prefs) to sm
-    }
+    private val boveda = FakeBovedaPin()
+    private val sm = SessionManager { 0L }
+    private val repo = AuthRepository(api, parser, sm, prefs, boveda)
 
     @Test
-    fun `login OK guarda token cifrable, recuerda telefono y activa la sesion`() = runTest {
-        val (repo, sm) = repo()
+    fun `login OK deja el token en memoria con su vencimiento, recuerda telefono y activa la sesion`() = runTest {
         api.loginResp = { TokenDTO("jwt-1", "USUARIO", "2026-10-14T10:00:00-05:00") }
         val r = repo.login("3001234567", "482915")
         assertEquals(Resultado.Ok(Unit), r)
         assertEquals(EstadoSesion.Activa, sm.estado.value)
         assertEquals("jwt-1", sm.tokenActual())
-        assertEquals(SesionGuardada("jwt-1", java.time.OffsetDateTime.parse("2026-10-14T15:00:00Z").toInstant().toEpochMilli()), storage.guardada)
         assertEquals("3001234567", prefs.telefonoRecordado.first())
         assertEquals("482915", api.logins.single().pin)
+        assertEquals(0, boveda.borrados)
     }
 
     @Test
-    fun `login con expiraEn nulo o invalido guarda sin vencimiento`() = runTest {
-        val (repo, _) = repo()
+    fun `login con vencimiento pasado deja el token inutilizable`() = runTest {
+        val tarde = SessionManager { java.time.OffsetDateTime.parse("2026-10-14T15:00:00Z").toInstant().toEpochMilli() }
+        api.loginResp = { TokenDTO("jwt", null, "2026-10-14T10:00:00-05:00") }
+        AuthRepository(api, parser, tarde, prefs, boveda).login("3001234567", "482915")
+        assertNull(tarde.tokenActual())
+    }
+
+    @Test
+    fun `login con expiraEn nulo o invalido queda sin vencimiento`() = runTest {
+        val lejos = SessionManager { Long.MAX_VALUE }
         api.loginResp = { TokenDTO("jwt", null, "no-es-fecha") }
-        repo.login("3001234567", "482915")
-        assertNull(storage.guardada?.expiraEnMillis)
+        AuthRepository(api, parser, lejos, prefs, boveda).login("3001234567", "482915")
+        assertEquals("jwt", lejos.tokenActual())
     }
 
     @Test
     fun `login 401 no inicia sesion ni recuerda telefono`() = runTest {
-        val (repo, sm) = repo()
         api.loginResp = { throw httpError(401, problem(401, "Credenciales invalidas")) }
         val r = repo.login("3001234567", "000001")
         assertEquals(401, ((r as Resultado.Falla).error as AppError.Http).status)
-        assertEquals(EstadoSesion.Cargando, sm.estado.value)
-        assertNull(storage.guardada)
+        assertEquals(EstadoSesion.Inactiva(), sm.estado.value)
+        assertNull(sm.tokenActual())
         assertNull(prefs.telefonoRecordado.first())
     }
 
     @Test
-    fun `activar envia consentimiento y recuerda telefono solo si funciona`() = runTest {
-        val (repo, _) = repo()
+    fun `activar OK envia consentimiento, recuerda telefono y borra la boveda de huella`() = runTest {
+        boveda.configurar("3001234567", "111111")
         api.activarResp = { Response.success(Unit) }
         assertEquals(Resultado.Ok(Unit), repo.activar("3001234567", "ABCD1234", "482915", "v2"))
         val dto = api.activaciones.single()
         assertTrue(dto.aceptaTratamientoDatos)
         assertEquals("v2", dto.versionConsentimiento)
         assertEquals("3001234567", prefs.telefonoRecordado.first())
-
-        val prefs2 = FakePreferencias()
-        val repo2 = AuthRepository(api, parser, SessionManager(storage, this), prefs2)
-        api.activarResp = { respuestaError(401, problem(401)) }
-        assertTrue(repo2.activar("3009999999", "X", "482915", "v2") is Resultado.Falla)
-        assertNull(prefs2.telefonoRecordado.first())
+        assertEquals(1, boveda.borrados)
+        assertEquals(false, boveda.configurada.first())
     }
 
     @Test
-    fun `cerrarSesion deja Inactiva por usuario`() = runTest {
-        val (repo, sm) = repo()
+    fun `activar con error no recuerda telefono ni borra la boveda`() = runTest {
+        boveda.configurar("3001234567", "111111")
+        api.activarResp = { respuestaError(401, problem(401)) }
+        assertTrue(repo.activar("3009999999", "X", "482915", "v2") is Resultado.Falla)
+        assertNull(prefs.telefonoRecordado.first())
+        assertEquals(0, boveda.borrados)
+        assertEquals("111111", boveda.pinGuardado)
+    }
+
+    @Test
+    fun `cerrarSesion deja Inactiva por usuario y conserva la huella`() = runTest {
+        boveda.configurar("3001234567", "111111")
         sm.iniciar("t", null)
         repo.cerrarSesion()
         assertEquals(EstadoSesion.Inactiva(MotivoCierre.CERRADA_POR_USUARIO), sm.estado.value)
+        assertEquals(0, boveda.borrados)
     }
 
     @Test
     fun `avisoPrivacidad sin conexion`() = runTest {
-        val (repo, _) = repo()
         api.avisoResp = { throw IOException() }
         assertEquals(Resultado.Falla(AppError.SinConexion), repo.avisoPrivacidad())
     }
@@ -112,33 +119,37 @@ class AuthRepositoryTest {
 class UsuarioRepositoryTest {
 
     private val api = FakeApiService()
-    private val storage = FakeSesionStorage()
+    private val boveda = FakeBovedaPin().apply { configurar("3001234567", "482915") }
+    private val sm = SessionManager { 0L }.apply { iniciar("t", null) }
+    private val repo = UsuarioRepository(api, parser, sm, boveda)
 
     @Test
-    fun `cambiarPin OK cierra la sesion por PIN_CAMBIADO`() = runTest {
-        val sm = SessionManager(storage, this).apply { iniciar("t", null) }
+    fun `cambiarPin OK borra la boveda y cierra la sesion por PIN_CAMBIADO`() = runTest {
         api.cambiarPinResp = { Response.success(Unit) }
-        val r = UsuarioRepository(api, parser, sm).cambiarPin("482915", "739164")
+        val r = repo.cambiarPin("482915", "739164")
         assertEquals(Resultado.Ok(Unit), r)
         assertEquals(EstadoSesion.Inactiva(MotivoCierre.PIN_CAMBIADO), sm.estado.value)
-        assertNull(storage.guardada)
+        assertNull(sm.tokenActual())
+        assertEquals(1, boveda.borrados)
+        assertNull(boveda.pinGuardado)
         assertEquals("739164", api.cambiosPin.single().pinNuevo)
     }
 
     @Test
-    fun `cambiarPin con error mantiene la sesion`() = runTest {
-        val sm = SessionManager(storage, this).apply { iniciar("t", null) }
+    fun `cambiarPin con error mantiene la sesion y la huella`() = runTest {
         api.cambiarPinResp = { respuestaError(400, problem(400, "PIN actual incorrecto")) }
-        val r = UsuarioRepository(api, parser, sm).cambiarPin("000000", "739164")
+        val r = repo.cambiarPin("000000", "739164")
         assertEquals(Resultado.Falla(AppError.Http(400, detail = "PIN actual incorrecto")), r)
         assertEquals(EstadoSesion.Activa, sm.estado.value)
+        assertEquals(0, boveda.borrados)
     }
 
     @Test
-    fun `tarifas vacias es Ok con lista vacia`() = runTest {
-        api.tarifasResp = { emptyList() }
-        val sm = SessionManager(storage, this)
-        assertEquals(Resultado.Ok(emptyList<Any>()), UsuarioRepository(api, parser, sm).tarifas())
+    fun `cambiarPin sin conexion mantiene la sesion y la huella`() = runTest {
+        api.cambiarPinResp = { throw IOException() }
+        assertEquals(Resultado.Falla(AppError.SinConexion), repo.cambiarPin("482915", "739164"))
+        assertEquals(EstadoSesion.Activa, sm.estado.value)
+        assertEquals(0, boveda.borrados)
     }
 }
 
@@ -237,8 +248,8 @@ class PagoRepositoryTest {
 
     @Test
     fun `misPagos 404 y limite de tamano`() = runTest {
-        api.pagoResp = { throw httpError(404, problem(404, "Pago no encontrado")) }
-        assertEquals(Resultado.Falla(AppError.Http(404, detail = "Pago no encontrado")), repo.pago(99))
+        api.misPagosResp = { throw httpError(404, problem(404, "No encontrado")) }
+        assertEquals(Resultado.Falla(AppError.Http(404, detail = "No encontrado")), repo.misPagos())
         assertEquals(5_242_880L, PagoRepository.TAMANO_MAXIMO_BYTES)
     }
 }

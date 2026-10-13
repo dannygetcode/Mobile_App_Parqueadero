@@ -6,13 +6,12 @@ import com.parqueadero.appparqueadero.data.repository.AuthRepository
 import com.parqueadero.appparqueadero.data.session.SessionManager
 import com.parqueadero.appparqueadero.support.FakeApiService
 import com.parqueadero.appparqueadero.support.FakePreferencias
-import com.parqueadero.appparqueadero.support.FakeSesionStorage
+import com.parqueadero.appparqueadero.support.FakeBovedaPin
 import com.parqueadero.appparqueadero.support.MainDispatcherRule
 import com.parqueadero.appparqueadero.support.gsonPrueba
 import com.parqueadero.appparqueadero.support.problem
 import com.parqueadero.appparqueadero.support.respuestaError
 import com.parqueadero.appparqueadero.ui.common.UiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -32,9 +31,9 @@ class ActivarViewModelTest {
 
     private val api = FakeApiService().apply { avisoResp = { AvisoPrivacidadDTO("2026-01", "Texto del aviso") } }
     private val prefs = FakePreferencias()
-    private val sesion = SessionManager(FakeSesionStorage(), CoroutineScope(mainRule.dispatcher))
+    private val sesion = SessionManager { 0L }
 
-    private fun vm() = ActivarViewModel(AuthRepository(api, ErrorParser(gsonPrueba), sesion, prefs))
+    private fun vm() = ActivarViewModel(AuthRepository(api, ErrorParser(gsonPrueba), sesion, prefs, FakeBovedaPin()))
 
     private fun ActivarViewModel.hastaConsentimiento() {
         onTelefono("300 123 4567"); onCodigo("abcd-1234"); continuar()
