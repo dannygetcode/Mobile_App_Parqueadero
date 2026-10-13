@@ -52,6 +52,9 @@ class AuthRepository(
         val resultado = errores.llamar { api.login(LoginDTO(telefono, pin)) }
         if (resultado is Resultado.Ok) {
             preferencias.recordarTelefono(telefono)
+            // Si entra otro número en este teléfono, la huella guardada del anterior deja de ofrecerse.
+            val telefonoHuella = bovedaPin.telefono()
+            if (telefonoHuella != null && telefonoHuella != telefono) bovedaPin.borrar()
             sesion.iniciar(resultado.datos.token, resultado.datos.expiraEn?.aEpochMillisONull())
         }
         return resultado.map { }

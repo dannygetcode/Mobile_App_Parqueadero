@@ -105,6 +105,7 @@ class PagosViewModel(
 
     fun quitarComprobante() {
         bytesComprobante = null
+        viewModelScope.launch { fuente.limpiarTemporales() }
         _estado.update { it.copy(comprobante = null, errorComprobante = null) }
     }
 
@@ -118,6 +119,7 @@ class PagosViewModel(
             when (val r = pagos.subirComprobante(bytes, comprobante.mime)) {
                 is Resultado.Ok -> {
                     bytesComprobante = null
+                    fuente.limpiarTemporales()
                     _estado.update {
                         it.copy(
                             subiendo = false,

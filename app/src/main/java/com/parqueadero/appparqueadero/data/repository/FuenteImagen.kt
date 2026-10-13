@@ -20,6 +20,9 @@ interface FuenteImagen {
 
     /** Reescala y recomprime a JPEG para que pese menos de [maxBytes]. Null si no se logra. */
     suspend fun reducir(bytes: ByteArray, maxBytes: Long): ByteArray?
+
+    /** Borra las fotos temporales tomadas con la cámara (datos personales del comprobante). */
+    suspend fun limpiarTemporales() {}
 }
 
 object TipoImagen {
@@ -36,6 +39,11 @@ object TipoImagen {
 class ContentResolverFuenteImagen(context: Context) : FuenteImagen {
 
     private val resolver = context.applicationContext.contentResolver
+    private val carpetaTemporal = java.io.File(context.applicationContext.cacheDir, CARPETA_TEMPORAL)
+
+    override suspend fun limpiarTemporales() {
+        withContext(Dispatchers.IO) { carpetaTemporal.listFiles()?.forEach { it.delete() } }
+    }
 
     override suspend fun leer(uri: String): ImagenLeida? = withContext(Dispatchers.IO) {
         try {
@@ -82,8 +90,10 @@ class ContentResolverFuenteImagen(context: Context) : FuenteImagen {
         }
     }
 
-    private companion object {
-        const val LIMITE_LECTURA = 25L * 1024 * 1024
-        const val LADO_MAXIMO = 2560
+    companion object {
+        /** Debe coincidir con res/xml/archivos_compartidos.xml y con PagosScreen. */
+        const val CARPETA_TEMPORAL = "comprobantes"
+        private const val LIMITE_LECTURA = 25L * 1024 * 1024
+        private const val LADO_MAXIMO = 2560
     }
 }
