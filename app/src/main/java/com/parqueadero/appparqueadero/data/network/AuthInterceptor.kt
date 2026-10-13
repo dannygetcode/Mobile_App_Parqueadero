@@ -21,7 +21,9 @@ class AuthInterceptor(
         val respuesta = chain.proceed(
             peticion.newBuilder().header("Authorization", "Bearer $token").build()
         )
-        if (respuesta.code == 401) alNoAutorizado(token)
+        if (respuesta.code == 401 && !es401DeCredenciales(peticion.method, peticion.url.encodedPath)) {
+            alNoAutorizado(token)
+        }
         return respuesta
     }
 
@@ -29,5 +31,12 @@ class AuthInterceptor(
         private val PUBLICAS = listOf("/api/auth/", "/api/legal/", "/api/ping")
 
         fun esPublica(ruta: String): Boolean = PUBLICAS.any { ruta.contains(it) }
+
+        /**
+         * `PUT /usuarios/yo/pin` responde 401 cuando el PIN actual es incorrecto: es un error del formulario,
+         * no una sesión vencida, así que no cierra la sesión.
+         */
+        fun es401DeCredenciales(metodo: String, ruta: String): Boolean =
+            metodo == "PUT" && ruta.endsWith("/api/usuarios/yo/pin")
     }
 }
