@@ -12,13 +12,10 @@ import com.parqueadero.appparqueadero.data.repository.FuenteImagen
 import com.parqueadero.appparqueadero.data.repository.PagoRepository
 import com.parqueadero.appparqueadero.data.repository.UsuarioRepository
 import com.parqueadero.appparqueadero.data.session.DataStorePreferencias
-import com.parqueadero.appparqueadero.data.session.DataStoreSesionStorage
+import com.parqueadero.appparqueadero.data.session.BovedaPin
+import com.parqueadero.appparqueadero.data.session.KeystoreBovedaPin
 import com.parqueadero.appparqueadero.data.session.Preferencias
 import com.parqueadero.appparqueadero.data.session.SessionManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,15 +25,17 @@ import java.util.concurrent.TimeUnit
 /** Inyección de dependencias manual (sin Hilt). Una instancia por proceso, en [CupoApp]. */
 class AppContainer(context: Context) {
 
-    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    init {
+        borrarSesionPersistidaAntigua(context)
+    }
 
     private val gson = Gson()
 
     val preferencias: Preferencias = DataStorePreferencias(context)
 
-    val sesion = SessionManager(DataStoreSesionStorage(context), appScope).also { s ->
-        appScope.launch { s.restaurar() }
-    }
+    val sesion = SessionManager()
+
+    val bovedaPin: BovedaPin = KeystoreBovedaPin(context)
 
     private val okHttp = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
@@ -60,9 +59,21 @@ class AppContainer(context: Context) {
 
     private val errores = ErrorParser(gson)
 
-    val authRepository = AuthRepository(api, errores, sesion, preferencias)
-    val usuarioRepository = UsuarioRepository(api, errores, sesion)
+    val authRepository = AuthRepository(api, errores, sesion, preferencias, bovedaPin)
+    val usuarioRepository = UsuarioRepository(api, errores, sesion, bovedaPin)
     val pagoRepository = PagoRepository(api, errores)
     val accesoRepository = AccesoRepository(api, errores, gson)
     val fuenteImagen: FuenteImagen = ContentResolverFuenteImagen(context)
+}
+
+/**
+ * Hasta la Etapa 2 el token se guardaba cifrado en disco. Ahora vive solo en memoria:
+ * se borran el archivo y la clave que hayan quedado de versiones anteriores.
+ */
+private fun borrarSesionPersistidaAntigua(context: Context) {
+    try {
+        java.io.File(context.filesDir, "datastore/sesion.preferences_pb").delete()
+        java.security.KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.deleteEntry("cupo_sesion")
+    } catch (_: Exception) {
+    }
 }
