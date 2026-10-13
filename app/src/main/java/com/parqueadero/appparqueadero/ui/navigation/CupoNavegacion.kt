@@ -36,6 +36,10 @@ import com.parqueadero.appparqueadero.data.session.SessionManager
 import com.parqueadero.appparqueadero.ui.auth.BienvenidaScreen
 import com.parqueadero.appparqueadero.ui.auth.activar.ActivarScreen
 import com.parqueadero.appparqueadero.ui.auth.login.LoginScreen
+import com.parqueadero.appparqueadero.ui.camaras.CamarasScreen
+import com.parqueadero.appparqueadero.ui.inicio.InicioScreen
+import com.parqueadero.appparqueadero.ui.pagos.PagosScreen
+import com.parqueadero.appparqueadero.ui.perfil.PerfilScreen
 
 object Rutas {
     // Grafo de acceso
@@ -147,14 +151,12 @@ private fun GrafoPrincipal() {
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding()),
         ) {
             composable(Rutas.INICIO) {
-                InicioProvisional(onAbrirCamaras = { nav.navigate(Rutas.CAMARAS) { launchSingleTop = true } })
+                InicioScreen(onAbrirCamaras = { nav.navigate(Rutas.CAMARAS) { launchSingleTop = true } })
             }
-            composable(Rutas.PAGOS) { PantallaProvisional("Pagos", "Aquí subirás tus comprobantes y verás tu historial.") }
+            composable(Rutas.PAGOS) { PagosScreen() }
             composable(Rutas.ACTIVIDAD) { PantallaProvisional("Actividad", "Aquí verás tus visitas y pagos del año.") }
-            composable(Rutas.PERFIL) { PerfilProvisional() }
-            composable(Rutas.CAMARAS) {
-                PantallaProvisional("Cámaras", "Vista simulada de las cámaras del parqueadero.", onAtras = { nav.popBackStack() })
-            }
+            composable(Rutas.PERFIL) { PerfilScreen() }
+            composable(Rutas.CAMARAS) { CamarasScreen(onAtras = { nav.popBackStack() }) }
         }
     }
 }
