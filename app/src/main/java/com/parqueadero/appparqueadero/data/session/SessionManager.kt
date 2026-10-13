@@ -34,12 +34,14 @@ class SessionManager(private val ahora: () -> Long = System::currentTimeMillis) 
         return token
     }
 
+    @Synchronized
     fun iniciar(nuevoToken: String, expiraEn: Long?) {
         token = nuevoToken
         expiraEnMillis = expiraEn
         _estado.value = EstadoSesion.Activa
     }
 
+    @Synchronized
     fun cerrar(motivo: MotivoCierre) {
         val habiaSesion = token != null
         token = null
@@ -48,6 +50,7 @@ class SessionManager(private val ahora: () -> Long = System::currentTimeMillis) 
     }
 
     /** Llamado desde el interceptor (hilo de OkHttp). Ignora respuestas de un token ya reemplazado. */
+    @Synchronized
     fun alNoAutorizado(tokenUsado: String) {
         if (tokenUsado != token) return
         cerrar(MotivoCierre.VENCIDA)
