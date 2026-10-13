@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +42,7 @@ import com.parqueadero.appparqueadero.data.model.TipoVehiculo
 import com.parqueadero.appparqueadero.data.model.UsuarioDTO
 import com.parqueadero.appparqueadero.ui.auth.CupoMarca
 import com.parqueadero.appparqueadero.ui.common.UiState
+import com.parqueadero.appparqueadero.ui.components.EmptyState
 import com.parqueadero.appparqueadero.ui.components.ErrorState
 import com.parqueadero.appparqueadero.ui.components.PlateChip
 import com.parqueadero.appparqueadero.ui.components.PlateSize
@@ -105,7 +107,10 @@ fun InicioScreen(
                         titulo = "No pudimos cargar tu cuenta",
                         onReintentar = { viewModel.cargarCuenta() },
                     )
-                    UiState.Empty -> Unit
+                    UiState.Empty -> EmptyState(
+                        titulo = "No encontramos tu cuenta",
+                        mensaje = "Desliza hacia abajo para actualizar o comunícate con la administración.",
+                    )
                     is UiState.Success -> TarjetaCuenta(c.data)
                 }
 
@@ -169,7 +174,11 @@ private fun TarjetaCuenta(usuario: UsuarioDTO) {
                     usuario.suspendidoMotivo?.let { "Motivo: $it" } ?: "Comunícate con la administración.",
                     style = MaterialTheme.typography.bodyMedium,
                 )
-                dias != null && dias >= 0 -> Row(verticalAlignment = Alignment.Bottom) {
+                // Número y unidad se leen juntos con TalkBack ("12 días restantes").
+                dias != null && dias >= 0 -> Row(
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.semantics(mergeDescendants = true) {},
+                ) {
                     Text("$dias", style = MaterialTheme.typography.displaySmall.tabular())
                     Text(
                         if (dias == 1L) " día restante" else " días restantes",

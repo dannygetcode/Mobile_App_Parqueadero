@@ -52,8 +52,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.parqueadero.appparqueadero.ui.components.EmptyState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.parqueadero.appparqueadero.data.model.Carroceria
@@ -111,7 +115,10 @@ fun PerfilScreen(viewModel: PerfilViewModel = viewModel(factory = PerfilViewMode
             when (val u = usuario) {
                 UiState.Loading -> Skeleton(Modifier.fillMaxWidth().height(200.dp), shape = RoundedCornerShape(Radius.lg))
                 is UiState.Error -> ErrorState(mensaje = u.mensaje, titulo = "No pudimos cargar tus datos", onReintentar = viewModel::cargar)
-                UiState.Empty -> Unit
+                UiState.Empty -> EmptyState(
+                    titulo = "Sin datos de perfil",
+                    mensaje = "No encontramos tus datos. Comunícate con la administración.",
+                )
                 is UiState.Success -> {
                     DatosPersonales(u.data)
                     Vehiculo(u.data)
@@ -139,7 +146,7 @@ fun PerfilScreen(viewModel: PerfilViewModel = viewModel(factory = PerfilViewMode
                 onClick = { confirmarSalida = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
+                    .heightIn(min = 48.dp),
             ) {
                 Icon(Icons.AutoMirrored.Rounded.Logout, contentDescription = null)
                 Text("Cerrar sesión", modifier = Modifier.padding(start = Spacing.xs))
@@ -235,7 +242,7 @@ private fun DialogoActivarHuella(s: ActivacionHuellaUiState, vm: PerfilViewModel
         },
         confirmButton = {
             TextButton(onClick = confirmar, enabled = !s.verificando) {
-                Text(if (s.verificando) "Verificando..." else "Continuar")
+                Text(if (s.verificando) "Verificando…" else "Continuar")
             }
         },
         dismissButton = { TextButton(onClick = vm::cerrarActivacionHuella, enabled = !s.verificando) { Text("Cancelar") } },
@@ -359,7 +366,7 @@ private fun DialogoCambioPin(s: CambioPinUiState, vm: PerfilViewModel) {
         },
         confirmButton = {
             TextButton(onClick = vm::confirmarCambioPin, enabled = !s.enviando) {
-                Text(if (s.enviando) "Cambiando..." else "Cambiar")
+                Text(if (s.enviando) "Cambiando…" else "Cambiar")
             }
         },
         dismissButton = { TextButton(onClick = vm::cerrarCambioPin, enabled = !s.enviando) { Text("Cancelar") } },
@@ -369,9 +376,17 @@ private fun DialogoCambioPin(s: CambioPinUiState, vm: PerfilViewModel) {
 @Composable
 private fun CampoPin(etiqueta: String, valor: String, error: String?, habilitado: Boolean, onCambio: (String) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.xxs)) {
-        Text(etiqueta, style = MaterialTheme.typography.labelLarge)
+        // La etiqueta visible ya la anuncia el campo (contentDescription de PinInput): se oculta para no leerla dos veces.
+        Text(etiqueta, style = MaterialTheme.typography.labelLarge, modifier = Modifier.clearAndSetSemantics { })
         PinInput(valor = valor, onValorChange = onCambio, etiqueta = etiqueta, habilitado = habilitado, error = error)
-        error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
+        error?.let {
+            Text(
+                it,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            )
+        }
     }
 }
 
