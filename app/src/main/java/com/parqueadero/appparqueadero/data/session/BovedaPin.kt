@@ -78,8 +78,8 @@ class KeystoreBovedaPin(context: Context) : BovedaPin {
             borrar()
             PreparacionHuella.Invalidada
         } catch (_: Exception) {
-            borrar()
-            PreparacionHuella.Invalidada
+            // Error pasajero del Keystore: no se borra nada; esta vez se entra con PIN.
+            PreparacionHuella.NoConfigurada
         }
     }
 
