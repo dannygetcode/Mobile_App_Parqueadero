@@ -1,58 +1,91 @@
 package com.parqueadero.appparqueadero.ui.theme
 
 import android.app.Activity
-import android.os.Build
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+/** Preferencia de tema; el selector vive en Perfil. */
+enum class ThemeMode { SISTEMA, CLARO, OSCURO }
+
+/**
+ * Colores de estado y de placa que Material 3 no cubre.
+ * Cada estado tiene un color de contenido (icono/texto sobre surface) y un contenedor con su "on".
+ */
+@Immutable
+data class CupoExtendedColors(
+    val exito: Color,
+    val exitoContainer: Color,
+    val onExitoContainer: Color,
+    val peligro: Color,
+    val peligroContainer: Color,
+    val onPeligroContainer: Color,
+    val advertencia: Color,
+    val advertenciaContainer: Color,
+    val onAdvertenciaContainer: Color,
+    val neutro: Color,
+    val neutroContainer: Color,
+    val onNeutroContainer: Color,
+    val plate: Color,
+    val onPlate: Color,
+    val plateBorder: Color,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val LocalCupoColors = staticCompositionLocalOf { LightExtendedColors }
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
+/** Acceso a los colores extendidos: `MaterialTheme.cupo.exito`. */
+val MaterialTheme.cupo: CupoExtendedColors
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalCupoColors.current
 
 @Composable
-fun AppParqueaderoTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+fun CupoTheme(
+    themeMode: ThemeMode = ThemeMode.SISTEMA,
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val darkTheme = when (themeMode) {
+        ThemeMode.SISTEMA -> isSystemInDarkTheme()
+        ThemeMode.CLARO -> false
+        ThemeMode.OSCURO -> true
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    // enableEdgeToEdge sigue al sistema; si el usuario fuerza un modo, ajustamos los iconos de las barras.
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = view.context.findActivity()?.window ?: return@SideEffect
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = !darkTheme
+                isAppearanceLightNavigationBars = !darkTheme
+            }
+        }
+    }
+
+    CompositionLocalProvider(
+        LocalCupoColors provides if (darkTheme) DarkExtendedColors else LightExtendedColors,
+    ) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColors else LightColors,
+            typography = CupoTypography,
+            shapes = CupoShapes,
+            content = content,
+        )
+    }
+}
+
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
