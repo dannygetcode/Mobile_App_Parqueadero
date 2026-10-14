@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Added by code-review-graph
+.code-review-graph/
+
+# Instrucciones y prompts de asistentes de IA (solo locales)
+CLAUDE.md
+**/CLAUDE.md
+.claude/
+prompts/
