@@ -88,6 +88,7 @@ import com.patrykandpatrick.vico.core.common.shape.CorneredShape
 import java.text.DecimalFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 private val formatoSemana = DateTimeFormatter.ofPattern("d MMM", LOCALE_CO)
 private val formatoEvento = DateTimeFormatter.ofPattern("EEE d MMM, H:mm", LOCALE_CO)
@@ -165,7 +166,7 @@ private fun Resumen(resumen: UiState<ResumenUsuarioDTO>, onReintentar: () -> Uni
                 listOf(Kpi("Pagado este año", r.totalPagadoAnio?.comoPesos(), "en lo que va del año", Icons.Rounded.Payments)),
                 listOf(Kpi("Promedio mensual", r.promedioMensualPagado?.comoPesos(), "pagado por mes", Icons.AutoMirrored.Rounded.TrendingUp)),
                 listOf(
-                    Kpi("Permanencia", ActividadViewModel.duracionLegible(r.permanenciaPromedioMin), "promedio por visita", Icons.Rounded.Timer),
+                    Kpi("Permanencia", ActividadViewModel.duracionLegible(r.permanenciaPromedioMin?.roundToInt()), "promedio por visita", Icons.Rounded.Timer),
                     Kpi("Llegada habitual", r.horaHabitualLlegada, "hora más frecuente", Icons.Rounded.Schedule),
                 ),
             )
