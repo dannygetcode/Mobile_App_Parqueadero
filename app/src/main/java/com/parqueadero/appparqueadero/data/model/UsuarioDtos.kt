@@ -40,7 +40,8 @@ data class ResumenUsuarioDTO(
     val totalPagadoAnio: Long?,
     val promedioMensualPagado: Long?,
     val visitasMes: Int?,
-    val permanenciaPromedioMin: Int?,
+    /** Minutos, con decimales (Double en el backend). */
+    val permanenciaPromedioMin: Double?,
     /** "07:40" o null. */
     val horaHabitualLlegada: String?,
 )
