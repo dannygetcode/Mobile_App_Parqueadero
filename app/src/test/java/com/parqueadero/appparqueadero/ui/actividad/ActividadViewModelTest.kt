@@ -43,7 +43,7 @@ class ActividadViewModelTest {
     private val hoy = LocalDate.of(2026, 10, 14)
     private val lunesActual = LocalDate.of(2026, 10, 12)
 
-    private val resumen = ResumenUsuarioDTO(EstadoUsuario.ACTIVO, 20, 300_000, 100_000, 12, 135, "07:40")
+    private val resumen = ResumenUsuarioDTO(EstadoUsuario.ACTIVO, 20, 300_000, 100_000, 12, 135.5, "07:40")
 
     private fun vm() = ActividadViewModel(
         UsuarioRepository(api, parser, SessionManager { 0L }, FakeBovedaPin()),
