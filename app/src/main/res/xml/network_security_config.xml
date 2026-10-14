@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Release: solo HTTPS. La version de debug (src/debug) permite HTTP hacia el entorno local. -->
 <network-security-config>
-
-    <!-- Para emulador -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">10.0.2.2</domain>
-    </domain-config>
-
-    <!-- Para pruebas desde dispositivo real en red local -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">192.168.1.3</domain>
-    </domain-config>
-    <!-- IP Camara -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">192.168.1.2</domain>
-    </domain-config>
-
-
-
+    <base-config cleartextTrafficPermitted="false" />
 </network-security-config>
