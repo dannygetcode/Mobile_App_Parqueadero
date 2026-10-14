@@ -34,3 +34,12 @@ Pruebas unitarias en JVM de ViewModels y repositorios con una API falsa; no requ
 
 ## Configuración del backend que afecta a la app
 - Duración de la puerta abierta: propiedad `accesos.apertura-segundos` del backend (la app muestra la cuenta regresiva según `abiertaHasta`).
+
+## Novedades de la versión 2.0 (rediseño)
+- Nueva marca "Cupo": tema claro/oscuro, tipografía Space Grotesk + Inter y componentes propios (ver `docs/diseno/sistema-cupo.md`).
+- Activación de cuenta en 3 pasos (celular y código, PIN, aviso de privacidad) y login con PIN o huella.
+- Puerta tipo persiana con gesto, vibración y cuenta regresiva; cámaras con vista simulada.
+- Pagos con comprobante validado (JPEG/PNG, hasta 5 MB) e historial por año.
+- Actividad con indicadores y gráfico de visitas por semana (Vico).
+- Seguridad: el token solo vive en memoria (al cerrar la app hay que volver a entrar), el PIN de la huella se guarda cifrado con el Keystore, HTTP solo en debug y capturas bloqueadas en release.
+- Se corrigen los errores de la versión 1.0: `userId` ya no se envía en pagos, el login maneja errores y carga, sin pantallas duplicadas en la navegación y la puerta revierte si falla.
