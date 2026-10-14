@@ -3,6 +3,7 @@
 App Android (Kotlin, Jetpack Compose, Material 3) para los usuarios de un parqueadero de 6 carros y 1 moto. Se conecta al backend Spring Boot del proyecto (`../backend`).
 
 Video de la versión 1.0: https://youtu.be/dBP5H_squB4
+
 Video de la versión 1.1: https://youtu.be/QO1wIvvKo7I
 
 ## Qué hace
