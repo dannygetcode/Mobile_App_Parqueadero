@@ -91,3 +91,7 @@ Es un rediseño completo con la marca Cupo.
 - Seguridad. El token solo vive en memoria y al cerrar la app hay que volver a entrar. El PIN de la huella se guarda cifrado con el Keystore. HTTP sin cifrar solo se permite en debug, y las capturas de pantalla se bloquean en release.
 - Se corrigen los errores de la versión 1.0. Los pagos ya no envían `userId`, el login maneja errores y estados de carga, la navegación no duplica pantallas y la puerta revierte si la orden falla.
 
+Video de la versión 1.0: https://youtu.be/dBP5H_squB4
+
+Video de la versión 1.1: https://youtu.be/QO1wIvvKo7I
+
