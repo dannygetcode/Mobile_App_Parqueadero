@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1420" height="660" viewBox="0 0 1420 660">
+<defs>
+<marker id="open" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1 L11,6 L1,11" fill="none" stroke="#13232B" stroke-width="1.4"/></marker>
+<marker id="filled" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1.5 L11,6 L1,10.5 Z" fill="#13232B"/></marker>
+<marker id="hollow" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1 L15,8 L1,15 Z" fill="#fff" stroke="#13232B" stroke-width="1.3"/></marker>
+<marker id="diamond" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,6 L10,1 L19,6 L10,11 Z" fill="#13232B"/></marker>
+<marker id="odiamond" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,6 L10,1 L19,6 L10,11 Z" fill="#fff" stroke="#13232B" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="50" width="1380" height="590" fill="none" stroke="#13232B" stroke-width="2.2"/>
+<path d="M20,50 V20 H270 V50" fill="#E3F2F1" stroke="#13232B" stroke-width="2.2"/>
+<text x="32.0" y="41.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="15.5" font-weight="bold" text-anchor="start" fill="#13232B">stm Sesión y navegación</text>
+<circle cx="330" cy="62" r="10" fill="#13232B"/>
+<polyline points="330,72 330,100" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="50" y="100" width="590" height="510" rx="18" fill="#FFFFFF" stroke="#13232B" stroke-width="1.6"/>
+<text x="68.0" y="126.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="start" fill="#13232B">Inactiva  (GrafoAcceso)</text>
+<polyline points="50,140 640,140" fill="none" stroke="#13232B" stroke-width="1.00"/>
+<circle cx="100" cy="200" r="10" fill="#13232B"/>
+<path d="M190,184 L206,200 L190,216 L174,200 Z" fill="#fff" stroke="#13232B" stroke-width="1.3"/>
+<polyline points="110,200 174,200" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="270" y="175" width="170" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="355.0" y="204.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Bienvenida</text>
+<rect x="270" y="420" width="170" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="355.0" y="449.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Login</text>
+<rect x="470" y="300" width="150" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="545.0" y="329.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Activar</text>
+<polyline points="206,200 270,200" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="238.0" y="190.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">[sin cuenta]</text>
+<polyline points="190,216 190,445 270,445" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="182.0" y="330.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="end" fill="#13232B">[teléfono recordado</text>
+<text x="182.0" y="348.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="end" fill="#13232B">o sesión cerrada]</text>
+<polyline points="440,200 545,200 545,300" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="553.0" y="255.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" fill="#13232B">Activar cuenta</text>
+<polyline points="330,225 330,420" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="338.0" y="330.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" fill="#13232B">Iniciar sesión</text>
+<polyline points="545,350 545,390 410,390 410,420" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="478.0" y="382.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">activación OK</text>
+<path d="M70,520 H606 L620,534 V592 H70 Z" fill="#FFF8E6" stroke="#13232B" stroke-width="1.2"/>
+<path d="M606,520 V534 H620" fill="none" stroke="#13232B" stroke-width="1.1"/>
+<text x="80.0" y="542.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">Activar: celular y código, PIN de 6 dígitos y aviso de privacidad.</text>
+<text x="80.0" y="560.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">Login: PIN o huella.</text>
+<rect x="780" y="100" width="600" height="510" rx="18" fill="#FFFFFF" stroke="#13232B" stroke-width="1.6"/>
+<text x="798.0" y="126.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="start" fill="#13232B">Activa  (GrafoPrincipal)</text>
+<polyline points="780,140 1380,140" fill="none" stroke="#13232B" stroke-width="1.00"/>
+<rect x="800" y="160" width="560" height="130" rx="8" fill="none" stroke="#13232B" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="812.0" y="182.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#13232B">NavigationBar</text>
+<circle cx="925" cy="188" r="10" fill="#13232B"/>
+<rect x="820" y="215" width="120" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="880.0" y="244.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Inicio</text>
+<rect x="955" y="215" width="120" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1015.0" y="244.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Pagos</text>
+<rect x="1090" y="215" width="120" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1150.0" y="244.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Actividad</text>
+<rect x="1225" y="215" width="120" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1285.0" y="244.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Perfil</text>
+<polyline points="925,198 925,215" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="820" y="370" width="120" height="50" rx="18" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="880.0" y="399.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Cámaras</text>
+<polyline points="865,265 865,370" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="857.0" y="322.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="end" fill="#13232B">ver cámaras</text>
+<polyline points="895,370 895,265" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="903.0" y="322.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="start" fill="#13232B">atrás</text>
+<path d="M960,360 H1346 L1360,374 V480 H960 Z" fill="#FFF8E6" stroke="#13232B" stroke-width="1.2"/>
+<path d="M1346,360 V374 H1360" fill="none" stroke="#13232B" stroke-width="1.1"/>
+<text x="970.0" y="382.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">Las pestañas conservan su estado al</text>
+<text x="970.0" y="400.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">alternarse (saveState).</text>
+<text x="970.0" y="418.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">Cambiar de grafo descarta el anterior</text>
+<text x="970.0" y="436.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">completo: no queda nada en la pila.</text>
+<path d="M800,500 H1346 L1360,514 V592 H800 Z" fill="#FFF8E6" stroke="#13232B" stroke-width="1.2"/>
+<path d="M1346,500 V514 H1360" fill="none" stroke="#13232B" stroke-width="1.1"/>
+<text x="810.0" y="522.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">Motivos de cierre (MotivoCierre): VENCIDA por un 401 en una</text>
+<text x="810.0" y="540.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">ruta protegida, CERRADA_POR_USUARIO, PIN_CAMBIADO y</text>
+<text x="810.0" y="558.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="start" fill="#13232B">APP_CERRADA al salir de la app.</text>
+<polyline points="440,445 780,445" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="477.0" y="426.5" width="266.0" height="16.5" fill="#fff"/>
+<text x="610.0" y="437.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">login OK / SessionManager.iniciar(token)</text>
+<polyline points="780,560 640,560" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="661.5" y="541.5" width="97.0" height="16.5" fill="#fff"/>
+<text x="710.0" y="552.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">cerrar(motivo)</text>
+</svg>
