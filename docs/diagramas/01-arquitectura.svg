@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1640" height="820" viewBox="0 0 1640 820">
+<defs>
+<marker id="open" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1 L11,6 L1,11" fill="none" stroke="#13232B" stroke-width="1.4"/></marker>
+<marker id="filled" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1.5 L11,6 L1,10.5 Z" fill="#13232B"/></marker>
+<marker id="hollow" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,1 L15,8 L1,15 Z" fill="#fff" stroke="#13232B" stroke-width="1.3"/></marker>
+<marker id="diamond" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,6 L10,1 L19,6 L10,11 Z" fill="#13232B"/></marker>
+<marker id="odiamond" viewBox="0 0 20 12" refX="1" refY="6" markerWidth="20" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+<path d="M1,6 L10,1 L19,6 L10,11 Z" fill="#fff" stroke="#13232B" stroke-width="1.2"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<circle cx="80" cy="312" r="12" fill="#fff" stroke="#13232B" stroke-width="1.5"/>
+<polyline points="80,324 80,358" fill="none" stroke="#13232B" stroke-width="1.50"/>
+<polyline points="58,336 102,336" fill="none" stroke="#13232B" stroke-width="1.50"/>
+<polyline points="60,386 80,358 100,386" fill="none" stroke="#13232B" stroke-width="1.50"/>
+<text x="80.0" y="406.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="middle" fill="#13232B">Usuario</text>
+<polyline points="105,336 210,336" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="158.0" y="328.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">toca</text>
+<rect x="170" y="50" width="1150" height="750" fill="none" stroke="#13232B" stroke-width="2.2"/>
+<path d="M170,50 V20 H675.7760000000001 V50" fill="#E3F2F1" stroke="#13232B" stroke-width="2.2"/>
+<text x="182.0" y="41.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="15.5" font-weight="bold" text-anchor="start" fill="#13232B">«aplicación» Cupo (Android, com.parqueadero.appparqueadero)</text>
+<rect x="195" y="100" width="265" height="680" rx="8" fill="none" stroke="#13232B" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="207.0" y="122.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#13232B">1. Pantallas (Compose)</text>
+<rect x="480" y="100" width="255" height="680" rx="8" fill="none" stroke="#13232B" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="492.0" y="122.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#13232B">2. ViewModels</text>
+<rect x="755" y="100" width="255" height="680" rx="8" fill="none" stroke="#13232B" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="767.0" y="122.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#13232B">3. Repositorios</text>
+<rect x="1030" y="100" width="275" height="680" rx="8" fill="none" stroke="#13232B" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="1042.0" y="122.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14" font-weight="normal" text-anchor="start" fill="#13232B">4. Red y sesión</text>
+<rect x="210" y="150" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="158" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="162" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="170" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="175.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">CupoRaiz</text>
+<text x="327.5" y="194.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">CupoNavegacion</text>
+<rect x="495" y="150" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="158" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="162" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="170" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="185.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">MainActivity</text>
+<polyline points="495,181 445,181" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="434.5" y="162.5" width="71.0" height="16.5" fill="#fff"/>
+<text x="470.0" y="173.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">setContent</text>
+<rect x="210" y="232" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="240" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="244" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="252" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="257.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Bienvenida, Activar,</text>
+<text x="327.5" y="276.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Login</text>
+<rect x="495" y="232" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="240" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="244" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="252" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="257.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">ActivarViewModel</text>
+<text x="607.5" y="276.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">LoginViewModel</text>
+<polyline points="445,263 495,263" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,263 770,263" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="210" y="314" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="322" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="326" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="334" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="339.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">InicioScreen</text>
+<text x="327.5" y="358.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">DoorControl</text>
+<rect x="495" y="314" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="322" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="326" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="334" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="349.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">InicioViewModel</text>
+<polyline points="445,345 495,345" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,345 770,345" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="210" y="396" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="404" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="408" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="416" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="431.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">PagosScreen</text>
+<rect x="495" y="396" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="404" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="408" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="416" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="431.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">PagosViewModel</text>
+<polyline points="445,427 495,427" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,427 770,427" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="210" y="478" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="486" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="490" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="498" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="513.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">ActividadScreen</text>
+<rect x="495" y="478" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="486" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="490" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="498" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="513.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">ActividadViewModel</text>
+<polyline points="445,509 495,509" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,509 770,509" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="210" y="560" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="568" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="572" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="580" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="595.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">PerfilScreen</text>
+<rect x="495" y="560" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="568" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="572" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="580" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="595.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">PerfilViewModel</text>
+<polyline points="445,591 495,591" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,591 770,591" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="210" y="642" width="235" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="419" y="650" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="654" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="415" y="662" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="327.5" y="677.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">CamarasScreen</text>
+<rect x="495" y="642" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="694" y="650" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="654" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="690" y="662" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="607.5" y="677.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">CamarasViewModel</text>
+<polyline points="445,673 495,673" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="720,673 770,673" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="770" y="232" width="225" height="472" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="969" y="240" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="965" y="244" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="965" y="252" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="882.5" y="386.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="882.5" y="405.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Repositorios</text>
+<text x="882.5" y="424.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">AuthRepository</text>
+<text x="882.5" y="443.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">UsuarioRepository</text>
+<text x="882.5" y="462.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">PagoRepository</text>
+<text x="882.5" y="481.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">AccesoRepository</text>
+<text x="882.5" y="500.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B"></text>
+<text x="882.5" y="519.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">FuenteImagen</text>
+<text x="882.5" y="538.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">(comprobante desde</text>
+<text x="882.5" y="557.7" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">cámara o galería)</text>
+<rect x="770" y="150" width="225" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="969" y="158" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="965" y="162" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="965" y="170" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="882.5" y="166.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="882.5" y="185.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">AppContainer</text>
+<text x="882.5" y="204.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">inyección manual</text>
+<rect x="1045" y="232" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="240" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="244" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="252" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="248.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="267.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">ApiService</text>
+<text x="1165.0" y="286.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">Retrofit, 12 rutas</text>
+<rect x="1045" y="314" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="322" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="326" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="334" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="330.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="349.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">AuthInterceptor</text>
+<text x="1165.0" y="368.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">OkHttp: Bearer y 401</text>
+<rect x="1045" y="396" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="404" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="408" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="416" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="412.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="431.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">ErrorParser</text>
+<text x="1165.0" y="450.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">ProblemDetail a AppError</text>
+<rect x="1045" y="478" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="486" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="490" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="498" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="494.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="513.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">SessionManager</text>
+<text x="1165.0" y="532.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">token solo en memoria</text>
+<rect x="1045" y="560" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="568" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="572" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="580" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="576.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="595.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">BovedaPin</text>
+<text x="1165.0" y="614.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">PIN cifrado con Keystore</text>
+<rect x="1045" y="642" width="240" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<rect x="1259" y="650" width="16" height="20" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="654" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<rect x="1255" y="662" width="8" height="4" fill="#F4FAF9" stroke="#13232B" stroke-width="1.1"/>
+<text x="1165.0" y="658.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«component»</text>
+<text x="1165.0" y="677.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Preferencias</text>
+<text x="1165.0" y="696.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">DataStore: tema, teléfono</text>
+<text x="1165.0" y="186.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">Resultado&lt;T&gt; = Ok | Falla(AppError)</text>
+<polyline points="995,263 1045,263" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="995,427 1045,427" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="995,509 1045,509" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="995,591 1045,591" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="995,673 1045,673" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="1165,294 1165,314" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="1285,360 1300,360 1300,509 1285,509" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<rect x="1260.5" y="421.5" width="38.5" height="16.5" fill="#fff"/>
+<text x="1296.0" y="432.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="end" fill="#13232B">token</text>
+<rect x="1370" y="232" width="245" height="140" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1492.5" y="268.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«sistema externo»</text>
+<text x="1492.5" y="287.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">API del backend</text>
+<text x="1492.5" y="306.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">Spring Boot, /api</text>
+<text x="1492.5" y="325.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">JSON con Bearer</text>
+<text x="1492.5" y="344.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">Back_End_Parqueadero_App</text>
+<rect x="1370" y="560" width="245" height="62" rx="8" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1492.5" y="576.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«sistema externo»</text>
+<text x="1492.5" y="595.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">Android Keystore</text>
+<text x="1492.5" y="614.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">clave AES-GCM con huella</text>
+<path d="M1395,644 V710 A97.5,12 0 0 0 1590,710 V644" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<ellipse cx="1492.5" cy="644" rx="97.5" ry="12" fill="#F4FAF9" stroke="#13232B" stroke-width="1.6"/>
+<text x="1492.5" y="670.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="normal" text-anchor="middle" fill="#13232B">«almacén»</text>
+<text x="1492.5" y="689.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#13232B">DataStore</text>
+<text x="1492.5" y="708.2" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="normal" text-anchor="middle" fill="#13232B">archivos locales</text>
+<polyline points="1285,334 1370,334" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<text x="1328.0" y="326.0" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="12.5" font-weight="normal" text-anchor="middle" fill="#13232B">HTTP</text>
+<polyline points="1285,591 1370,591" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+<polyline points="1285,673 1395,673" fill="none" stroke="#13232B" stroke-width="1.50" marker-end="url(#open)"/>
+</svg>
